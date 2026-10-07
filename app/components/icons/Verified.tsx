@@ -1,0 +1,14 @@
+import type { ComponentPropsWithoutRef } from 'react';
+
+export default function IconVerified({ ...props }: ComponentPropsWithoutRef<'svg'>) {
+  return (
+    <svg
+      aria-label="Identity verification badge icon"
+      role="img"
+      viewBox="0 0 16 16"
+      {...props}
+    >
+      <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m-1-4.09-3.7-3.7 1.4-1.42L7 9.1l4.3-4.3 1.4 1.42z"></path>
+    </svg>
+  );
+}
