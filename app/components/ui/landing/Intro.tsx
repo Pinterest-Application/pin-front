@@ -1,5 +1,7 @@
 import { Button } from 'react-aria-components';
 
+import AuthModal from '@ui/AuthModal';
+
 export default function LandingIntro() {
   return (
     <>
@@ -17,9 +19,11 @@ export default function LandingIntro() {
             <br /> Halloween
           </div>
           <div className="flex items-center gap-2">
-            <Button className="bg-red h-12 rounded-2xl px-4 py-2 font-medium text-white">
-              Join Pinterest for free
-            </Button>
+            <AuthModal>
+              <Button className="bg-red h-12 cursor-pointer rounded-2xl px-4 py-2 font-medium text-white duration-100 data-hovered:bg-[#cc001f] data-pressed:scale-95 data-pressed:bg-[#b2001b]">
+                Join Pinterest for free
+              </Button>
+            </AuthModal>
           </div>
         </div>
       </div>
@@ -38,9 +42,11 @@ export default function LandingIntro() {
           </div>
 
           <div className="mx-2 flex flex-col gap-2">
-            <Button className="bg-red mb-4 h-12 w-full rounded-2xl px-3 py-1.5 font-medium tracking-wide text-white">
-              Continue with google
-            </Button>
+            <AuthModal>
+              <Button className="bg-red mb-4 h-12 w-full cursor-pointer rounded-2xl px-3 py-1.5 font-medium tracking-wide text-white duration-100 data-hovered:bg-[#cc001f] data-pressed:scale-95 data-pressed:bg-[#b2001b]">
+                Continue with google
+              </Button>
+            </AuthModal>
             <div className="text-center text-xs tracking-wide text-[#62625b]">
               By continuing, you agree to Pinterest's <span className="underline">Terms of Service</span> and
               acknowledge you've read our <span className="underline">Privacy Policy</span>.{' '}

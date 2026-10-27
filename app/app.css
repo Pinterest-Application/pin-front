@@ -1,5 +1,7 @@
 @import 'tailwindcss';
 
+@plugin 'tailwindcss-motion';
+
 @theme {
   --font-sans:
     'Roboto', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
@@ -18,6 +20,10 @@
   @variant lg {
     padding-inline: 4rem;
   }
+}
+
+@utility app-container {
+  padding-inline: 1rem;
 }
 
 html,

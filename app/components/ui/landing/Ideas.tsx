@@ -1,5 +1,7 @@
 import { Button } from 'react-aria-components';
 
+import AuthModal from '@ui/AuthModal';
+
 export default function Ideas() {
   return (
     <div className="bg-linear-to-b from-[#f6f6f3] to-transparent py-16 md:py-25">
@@ -34,7 +36,11 @@ export default function Ideas() {
               </div>
 
               <div className="flex justify-center md:justify-start">
-                <Button className="bg-red h-12 rounded-2xl px-4 py-2 font-medium text-white">Join Pinterest</Button>
+                <AuthModal>
+                  <Button className="bg-red h-12 cursor-pointer rounded-2xl px-4 py-2 font-medium text-white duration-100 data-hovered:bg-[#cc001f] data-pressed:scale-95 data-pressed:bg-[#b2001b]">
+                    Join Pinterest
+                  </Button>
+                </AuthModal>
               </div>
             </div>
           </div>
@@ -59,7 +65,11 @@ export default function Ideas() {
               </div>
 
               <div className="flex justify-center md:justify-start">
-                <Button className="bg-red h-12 rounded-2xl px-4 py-2 font-medium text-white">Join Pinterest</Button>
+                <AuthModal>
+                  <Button className="bg-red h-12 cursor-pointer rounded-2xl px-4 py-2 font-medium text-white duration-100 data-hovered:bg-[#cc001f] data-pressed:scale-95 data-pressed:bg-[#b2001b]">
+                    Join Pinterest
+                  </Button>
+                </AuthModal>
               </div>
             </div>
           </div>
@@ -84,7 +94,11 @@ export default function Ideas() {
               </div>
 
               <div className="flex justify-center md:justify-start">
-                <Button className="bg-red h-12 rounded-2xl px-4 py-2 font-medium text-white">Join Pinterest</Button>
+                <AuthModal>
+                  <Button className="bg-red h-12 cursor-pointer rounded-2xl px-4 py-2 font-medium text-white duration-100 data-hovered:bg-[#cc001f] data-pressed:scale-95 data-pressed:bg-[#b2001b]">
+                    Join Pinterest
+                  </Button>
+                </AuthModal>
               </div>
             </div>
           </div>

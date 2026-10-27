@@ -1,5 +1,7 @@
 import { Button } from 'react-aria-components';
 
+import AuthModal from '@ui/AuthModal';
+
 import IconLogoMini from '@icons/LogoMini';
 
 export default function SignupSection() {
@@ -25,17 +27,11 @@ export default function SignupSection() {
         </div>
 
         <div className="mb-5 flex flex-col items-center">
-          <Button className="bg-red h-12 w-fit rounded-2xl px-5 py-2 font-medium text-white">
-            Continue with google
-          </Button>
-        </div>
-
-        <div className="mb-3 text-center text-sm text-white">
-          Already a member? <span className="underline">Log in</span>
-        </div>
-
-        <div className="mb-3 text-center text-sm text-white">
-          Are you a business? <span className="font-bold">Get started here</span>
+          <AuthModal>
+            <Button className="bg-red h-12 w-fit cursor-pointer rounded-2xl px-5 py-2 font-medium text-white duration-100 data-hovered:bg-[#cc001f] data-pressed:scale-95 data-pressed:bg-[#b2001b]">
+              Continue with google
+            </Button>
+          </AuthModal>
         </div>
 
         <div className="px-8 text-center text-xs text-white">
