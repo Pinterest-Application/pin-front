@@ -1,6 +1,26 @@
 import axios, { type AxiosError, type InternalAxiosRequestConfig } from 'axios';
 import { BACKEND_URL, getAccessToken, logout, setAccessToken } from '~/libs/auth';
 
+export class ApiError extends Error {
+  status?: number;
+
+  constructor(message: string, status?: number) {
+    super(message);
+    this.name = 'ApiError';
+    this.status = status;
+  }
+}
+
+export function toApiError(error: unknown, fallbackMessage: string): ApiError {
+  if (axios.isAxiosError(error)) {
+    const message = (error.response?.data as { message?: string } | undefined)?.message ?? fallbackMessage;
+
+    return new ApiError(message, error.response?.status);
+  }
+
+  return new ApiError(fallbackMessage);
+}
+
 interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;
 }

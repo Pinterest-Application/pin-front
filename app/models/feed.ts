@@ -1,4 +1,4 @@
-export interface FeedPin {
+export interface FeedResponse {
   id: string;
   pinId: string;
   mediaUrl: string;
@@ -7,31 +7,13 @@ export interface FeedPin {
   createdAt: string;
 }
 
-export interface FeedResponse {
-  content: FeedPin[];
-  empty: boolean;
-  first: boolean;
-  last: boolean;
-  number: number;
-  numberOfElements: number;
-  pageable: {
-    offset: number;
-    pageNumber: number;
-    pageSize: number;
-    paged: boolean;
-    sort: {
-      empty: boolean;
-      sorted: boolean;
-      unsorted: boolean;
-    };
-    unpaged: boolean;
-  };
-  size: number;
-  sort: {
-    empty: boolean;
-    sorted: boolean;
-    unsorted: boolean;
-  };
-  totalElements: number;
-  totalPages: number;
+export interface DiscoveryFeedPage {
+  items: FeedResponse[];
+  nextCursor: string | null;
+  hasMore: boolean;
+}
+
+export interface DiscoveryFeedParams {
+  cursor?: string; // max 200 chars
+  size?: number; // 1–50, defaults to 20 on the server
 }

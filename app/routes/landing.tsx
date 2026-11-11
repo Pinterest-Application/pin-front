@@ -4,16 +4,14 @@ import Inspiration from '@ui/landing/Inspiration';
 import LandingIntro from '@ui/landing/Intro';
 import SignupSection from '@ui/landing/SignupSection';
 
-interface LandingPageProps {}
-
-export default function LandingPage({}: LandingPageProps) {
+export default function LandingPage() {
   return (
-    <main>
+    <div>
       <LandingIntro />
       <Inspiration />
       <Ideas />
       <SignupSection />
       <Footer />
-    </main>
+    </div>
   );
 }

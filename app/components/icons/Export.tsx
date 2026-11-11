@@ -1,0 +1,15 @@
+import type { ComponentPropsWithoutRef } from 'react';
+
+export default function IconExport({ ...props }: ComponentPropsWithoutRef<'svg'>) {
+  return (
+    <svg
+      aria-hidden="true"
+      aria-label=""
+      role="img"
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <path d="M17.7 5.8 12 .08l-5.7 5.7L7.7 7.2 11 3.9V15h2V3.91l3.3 3.3zM2 18v-5H0v5a4 4 0 0 0 4 4h16a4 4 0 0 0 4-4v-5h-2v5a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2"></path>
+    </svg>
+  );
+}

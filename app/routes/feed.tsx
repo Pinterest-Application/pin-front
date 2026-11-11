@@ -1,162 +1,121 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { getDiscoveryFeed } from '~/api';
+import { AnimatePresence } from 'motion/react';
+import { useRef, useState } from 'react';
+import { useLocation } from 'react-router';
 
-import PinCard from '@ui/pin/PinCard';
+import Spinner from '@ui/Spinner';
+import FeedEmpty from '@ui/feed/FeedEmpty';
+import FeedEnd from '@ui/feed/FeedEnd';
+import FeedError from '@ui/feed/FeedError';
+import FeedLoadMoreError from '@ui/feed/FeedLoadMoreError';
+import PinMasonryGrid from '@ui/pin/PinMasonryGrid';
+import PinSkeletonGrid from '@ui/pin/PinSkeletonGrid';
 
-import type { FeedPin } from '@models/feed';
+import { useDiscoveryFeed } from '@hooks/useDiscoveryFeed';
+import { useInfiniteScroll } from '@hooks/useInfiniteScroll';
+import { useScrollRestoration } from '@hooks/useScrollRestoration';
 
-const SKELETON_ASPECT_RATIOS = [
-  'aspect-[3/4]',
-  'aspect-[9/16]',
-  'aspect-[4/5]',
-  'aspect-[1/1]',
-  'aspect-[9/16]',
-  'aspect-[3/4]',
-  'aspect-[2/3]',
-  'aspect-[9/16]',
-  'aspect-[4/5]',
-  'aspect-[3/4]',
-];
+import { cn } from '@libs/cn';
+
+const MIN_FRAME_WIDTH = 200;
+const GRID_GAP = 12;
 
 export default function Feed() {
-  const [pins, setPins] = useState<FeedPin[]>([]);
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const location = useLocation();
+  const {
+    items,
+    isLoading,
+    isEmpty,
+    hasMore,
+    isLoadingMore,
+    canLoadMore,
+    loadMore,
+    initialError,
+    loadMoreError,
+    retry,
+    refresh,
+  } = useDiscoveryFeed();
 
-  const sentinelRef = useRef<HTMLDivElement | null>(null);
-  const isFetchingRef = useRef(false);
+  // Stays true until the error's exit animation has finished, so the skeleton
+  // waits for the error to fade out instead of appearing underneath it.
+  const [isErrorOnScreen, setIsErrorOnScreen] = useState(false);
+  if (initialError && !isErrorOnScreen) setIsErrorOnScreen(true);
+  // Once an error has been shown, the skeleton fades in rather than popping in.
+  const [hasShownError, setHasShownError] = useState(false);
+  if (initialError && !hasShownError) setHasShownError(true);
 
-  const fetchFeed = useCallback(async (pageNum: number, isInitial = false) => {
-    if (isFetchingRef.current) return;
-    isFetchingRef.current = true;
-
-    if (isInitial) {
-      setIsLoading(true);
-      setError(null);
-    } else {
-      setIsLoadingMore(true);
-    }
-
-    try {
-      const data = await getDiscoveryFeed(pageNum, 10);
-
-      setPins((prev) => {
-        if (isInitial) return data.content;
-        // Avoid any duplicates by id
-        const existingIds = new Set(prev.map((p) => p.id));
-        const newPins = data.content.filter((p) => !existingIds.has(p.id));
-        return [...prev, ...newPins];
-      });
-
-      setPage(pageNum);
-      const isLast = data.last || data.number >= data.totalPages;
-      setHasMore(!isLast);
-    } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Failed to load feed. Please try again.';
-      setError(message);
-    } finally {
-      setIsLoading(false);
-      setIsLoadingMore(false);
-      isFetchingRef.current = false;
-    }
-  }, []);
-
-  // Initial load
-  useEffect(() => {
-    fetchFeed(1, true);
-  }, [fetchFeed]);
-
-  // Infinite scroll observer
-  useEffect(() => {
-    if (!sentinelRef.current || !hasMore || isLoading || isLoadingMore) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const first = entries[0];
-        if (first.isIntersecting && hasMore && !isFetchingRef.current) {
-          fetchFeed(page + 1);
-        }
-      },
-      {
-        root: null,
-        rootMargin: '400px', // Preload before user reaches the very bottom
-        threshold: 0.1,
-      }
-    );
-
-    observer.observe(sentinelRef.current);
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [fetchFeed, page, hasMore, isLoading, isLoadingMore]);
+  const sentinelRef = useInfiniteScroll({ rootRef: scrollContainerRef, enabled: canLoadMore, onLoadMore: loadMore });
+  // Keyed by history entry: Back restores the position, a fresh visit starts at the top.
+  useScrollRestoration(scrollContainerRef, `feed-scroll:${location.key}`, items.length > 0);
 
   return (
-    <div className="app-container h-[calc(100vh-80px)] overflow-y-auto pt-4 pb-12">
-      {/* Initial Loading Skeletons */}
-      {isLoading && (
-        <div className="columns-2 gap-4 sm:columns-3 md:columns-4 lg:columns-5 xl:columns-6">
-          {SKELETON_ASPECT_RATIOS.map((aspect, idx) => (
-            <div
-              key={idx}
-              className={`mb-4 w-full animate-pulse break-inside-avoid rounded-2xl bg-neutral-200 ${aspect}`}
-            />
-          ))}
-        </div>
-      )}
-
-      {/* Error State */}
-      {error && !isLoading && pins.length === 0 && (
-        <div className="flex h-[50vh] flex-col items-center justify-center text-center">
-          <p className="mb-4 text-base text-neutral-600">{error}</p>
-          <button
-            type="button"
-            onClick={() => fetchFeed(1, true)}
-            className="bg-red cursor-pointer rounded-full px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-90"
-          >
-            Try Again
-          </button>
-        </div>
-      )}
-
-      {/* Empty State */}
-      {!isLoading && !error && pins.length === 0 && (
-        <div className="flex h-[50vh] flex-col items-center justify-center text-neutral-500">
-          <p className="text-lg font-medium">No pins to explore yet</p>
-          <p className="mt-1 text-sm text-neutral-400">Check back later for new ideas!</p>
-        </div>
-      )}
-
-      {/* Masonry Pin Grid */}
-      {pins.length > 0 && (
-        <>
-          <div className="columns-2 gap-4 sm:columns-3 md:columns-4 lg:columns-5 xl:columns-6">
-            {pins.map((pin) => (
-              <PinCard
-                key={pin.id}
-                pin={pin}
-              />
-            ))}
-          </div>
-
-          {/* Bottom sentinel for infinite scroll */}
-          <div
-            ref={sentinelRef}
-            className="h-10 w-full"
+    <div
+      ref={scrollContainerRef}
+      className={cn({
+        // scrollbar-gutter reserves the scrollbar's space up front, so the grid's
+        // first measurement doesn't change when content starts to scroll.
+        // `relative` anchors the full-page error, which is positioned over this container.
+        'app-container relative h-[calc(100vh-80px)] [scrollbar-gutter:stable] overflow-y-auto pb-12': true,
+        'overflow-hidden': isLoading,
+      })}
+    >
+      {/* Outside the branches below so that on retry it can play its exit
+          animation instead of being swapped for the skeleton instantly. */}
+      <AnimatePresence onExitComplete={() => setIsErrorOnScreen(false)}>
+        {initialError && (
+          <FeedError
+            key="feed-error"
+            message={initialError}
+            onRetry={retry}
           />
+        )}
+      </AnimatePresence>
 
-          {/* Loading more indicator */}
-          {isLoadingMore && (
-            <div className="flex justify-center py-6">
-              <div className="h-8 w-8 animate-spin rounded-full border-2 border-neutral-300 border-t-neutral-800" />
-            </div>
-          )}
-
-          {!hasMore && <div className="py-8 text-center text-sm text-neutral-400">You're all caught up!</div>}
-        </>
+      {isLoading ? (
+        !isErrorOnScreen && (
+          <div className={cn({ 'motion-opacity-in-0 motion-duration-200': hasShownError })}>
+            <PinSkeletonGrid
+              minFrameWidth={MIN_FRAME_WIDTH}
+              gap={GRID_GAP}
+            />
+          </div>
+        )
+      ) : initialError ? null : isEmpty ? (
+        <FeedEmpty />
+      ) : (
+        <PinMasonryGrid
+          items={items}
+          minFrameWidth={MIN_FRAME_WIDTH}
+          gap={GRID_GAP}
+          footer={
+            hasMore ? (
+              <div
+                ref={sentinelRef}
+                className="flex min-h-16 w-full items-center justify-center"
+              >
+                {loadMoreError ? (
+                  <FeedLoadMoreError
+                    message={loadMoreError}
+                    onRetry={retry}
+                    isRetrying={isLoadingMore}
+                  />
+                ) : (
+                  isLoadingMore && <Spinner size={24} />
+                )}
+              </div>
+            ) : (
+              <FeedEnd
+                rootRef={scrollContainerRef}
+                onRefresh={() => {
+                  // Jump to the top first: the skeleton replaces the grid, and
+                  // it should be seen from its start, not from mid-scroll.
+                  if (scrollContainerRef.current) scrollContainerRef.current.scrollTop = 0;
+                  refresh();
+                }}
+              />
+            )
+          }
+        />
       )}
     </div>
   );

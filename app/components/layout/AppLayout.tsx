@@ -13,20 +13,6 @@ import type { Route } from './+types/AppLayout';
 
 export const clientMiddleware: Route.ClientMiddlewareFunction[] = [authClientMiddleware];
 
-export async function clientLoader() {
-  return null;
-}
-
-clientLoader.hydrate = true;
-
-export function HydrateFallback() {
-  return (
-    <div className="flex h-screen items-center justify-center text-neutral-500">
-      <div className="h-8 w-8 animate-spin rounded-full border-2 border-neutral-300 border-t-neutral-800" />
-    </div>
-  );
-}
-
 export default function AppLayout() {
   const isOpen = useExpandedSidebarStore((s) => s.isOpen);
 

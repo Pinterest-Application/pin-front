@@ -1,11 +1,16 @@
-import type { FeedResponse } from '@models/feed';
+import type { DiscoveryFeedPage, DiscoveryFeedParams } from '@models/feed';
 
-import { apiClient } from './client';
+import { apiClient, toApiError } from './client';
 
-export async function getDiscoveryFeed(page: number = 1, size: number = 20): Promise<FeedResponse> {
-  const response = await apiClient.get<FeedResponse>('/feed/discovery', {
-    params: { page, size },
-  });
+export async function getDiscoveryFeed(
+  params: DiscoveryFeedParams = {},
+  signal?: AbortSignal
+): Promise<DiscoveryFeedPage> {
+  try {
+    const response = await apiClient.get<DiscoveryFeedPage>('/feed/discovery', { params, signal });
 
-  return response.data;
+    return response.data;
+  } catch (error) {
+    throw toApiError(error, 'Failed to load the feed.');
+  }
 }

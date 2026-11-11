@@ -1,4 +1,4 @@
-import { Button, TooltipTrigger } from 'react-aria-components';
+import { Button, Focusable, TooltipTrigger } from 'react-aria-components';
 import { NavLink } from 'react-router';
 
 import { Tooltip } from '@ui/Tooltip';
@@ -54,12 +54,14 @@ export default function Sidebar() {
             delay={0}
             closeDelay={0}
           >
-            <NavLink
-              to="/app"
-              className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-2xl transition hover:bg-[rgb(246,246,243)] active:scale-95 active:bg-[rgb(239,239,235)]"
-            >
-              <IconLogoMini className="fill-red h-6 w-6" />
-            </NavLink>
+            <Focusable>
+              <NavLink
+                to="/app"
+                className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-2xl transition hover:bg-[rgb(246,246,243)] active:scale-95 active:bg-[rgb(239,239,235)]"
+              >
+                <IconLogoMini className="fill-red h-6 w-6" />
+              </NavLink>
+            </Focusable>
             <Tooltip placement="end">Home</Tooltip>
           </TooltipTrigger>
 
@@ -67,13 +69,17 @@ export default function Sidebar() {
             delay={0}
             closeDelay={0}
           >
-            <NavLink
-              to="/app"
-              end
-              className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-2xl transition hover:bg-[rgb(246,246,243)] active:scale-95 active:bg-[rgb(239,239,235)]"
-            >
-              {({ isActive }) => (isActive ? <IconHomeFilled className="h-6 w-6" /> : <IconHome className="h-6 w-6" />)}
-            </NavLink>
+            <Focusable>
+              <NavLink
+                to="/app"
+                end
+                className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-2xl transition hover:bg-[rgb(246,246,243)] active:scale-95 active:bg-[rgb(239,239,235)]"
+              >
+                {({ isActive }) =>
+                  isActive ? <IconHomeFilled className="h-6 w-6" /> : <IconHome className="h-6 w-6" />
+                }
+              </NavLink>
+            </Focusable>
             <Tooltip placement="end">Home</Tooltip>
           </TooltipTrigger>
 
@@ -91,14 +97,16 @@ export default function Sidebar() {
             delay={0}
             closeDelay={0}
           >
-            <NavLink
-              to="/app/create"
-              className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-2xl transition hover:bg-[rgb(246,246,243)] active:scale-95 active:bg-[rgb(239,239,235)]"
-            >
-              {({ isActive }) =>
-                isActive ? <IconCreateFilled className="h-6 w-6" /> : <IconCreate className="h-6 w-6" />
-              }
-            </NavLink>
+            <Focusable>
+              <NavLink
+                to="/app/create"
+                className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-2xl transition hover:bg-[rgb(246,246,243)] active:scale-95 active:bg-[rgb(239,239,235)]"
+              >
+                {({ isActive }) =>
+                  isActive ? <IconCreateFilled className="h-6 w-6" /> : <IconCreate className="h-6 w-6" />
+                }
+              </NavLink>
+            </Focusable>
             <Tooltip placement="end">Create</Tooltip>
           </TooltipTrigger>
 
@@ -136,12 +144,14 @@ export default function Sidebar() {
             delay={0}
             closeDelay={0}
           >
-            <NavLink
-              to="/app/settings/refine"
-              className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-2xl transition hover:bg-[rgb(246,246,243)] active:scale-95 active:bg-[rgb(239,239,235)]"
-            >
-              <IconRefine className="h-6 w-6" />
-            </NavLink>
+            <Focusable>
+              <NavLink
+                to="/app/settings/refine"
+                className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-2xl transition hover:bg-[rgb(246,246,243)] active:scale-95 active:bg-[rgb(239,239,235)]"
+              >
+                <IconRefine className="h-6 w-6" />
+              </NavLink>
+            </Focusable>
             <Tooltip
               placement="end"
               className="max-w-40"
@@ -156,14 +166,16 @@ export default function Sidebar() {
             delay={0}
             closeDelay={0}
           >
-            <NavLink
-              to="/app/settings"
-              className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-2xl transition hover:bg-[rgb(246,246,243)] active:scale-95 active:bg-[rgb(239,239,235)]"
-            >
-              {({ isActive }) =>
-                isActive ? <IconSettingsFilled className="h-6 w-6" /> : <IconSettings className="h-6 w-6" />
-              }
-            </NavLink>
+            <Focusable>
+              <NavLink
+                to="/app/settings"
+                className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-2xl transition hover:bg-[rgb(246,246,243)] active:scale-95 active:bg-[rgb(239,239,235)]"
+              >
+                {({ isActive }) =>
+                  isActive ? <IconSettingsFilled className="h-6 w-6" /> : <IconSettings className="h-6 w-6" />
+                }
+              </NavLink>
+            </Focusable>
             <Tooltip placement="end">Settings & Support</Tooltip>
           </TooltipTrigger>
         </div>

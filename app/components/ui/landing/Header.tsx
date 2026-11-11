@@ -41,7 +41,7 @@ export default function LandingHeader() {
           <AuthModal>
             <Button
               className={cn({
-                'bg-red transition-ease h-9 cursor-pointer rounded-xl px-4 py-2 text-sm font-medium tracking-wide text-nowrap text-white duration-100 data-hovered:bg-[#cc001f] data-pressed:scale-95 data-pressed:bg-[#b2001b]': true,
+                'bg-red h-9 cursor-pointer rounded-xl px-4 py-2 text-sm font-medium tracking-wide text-nowrap text-white transition duration-100 data-hovered:bg-[#cc001f] data-pressed:scale-95 data-pressed:bg-[#b2001b]': true,
                 'md:h-12 md:rounded-2xl md:text-base': true,
               })}
             >

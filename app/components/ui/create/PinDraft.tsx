@@ -4,12 +4,11 @@ import { Popover } from '@ui/Popover';
 
 import IconDots from '@icons/Dots';
 
-export default function PinDraft({ title }: { title?: string }) {
+export default function PinDraft() {
   return (
     <div className="grid cursor-pointer grid-cols-[64px_1fr_32px] rounded-xl p-2 hover:bg-[rgb(240,240,240)]">
       <div className="aspect-square w-16 rounded-xl bg-neutral-400"></div>
-      <div className="flex flex-col justify-center px-3">
-        <div className="text-sm font-medium">{title}</div>
+      <div className="flex items-center px-3">
         <div className="text-sm">27 days until expiration</div>
       </div>
       <div className="flex items-center justify-end">

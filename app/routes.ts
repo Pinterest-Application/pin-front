@@ -7,6 +7,7 @@ export default [
     layout('components/layout/AppLayout.tsx', [
       index('routes/feed.tsx'),
       route('create', 'routes/create-pin.tsx'),
+      route('pin/:pinId', 'routes/pin.tsx'),
       ...prefix('settings', [
         layout('components/layout/SettingsLayout.tsx', [
           index('routes/settings/edit-profile.tsx'),
